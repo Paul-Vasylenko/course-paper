@@ -1,2 +1,2 @@
 # course-paper
-Курсовая робота. Тема: карточная игра "Сундучки" с компьютерным оппонентом
+Course paper. Topic: a card game "Chests" vs computer opponent
