@@ -1,0 +1,295 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+
+:root {
+	/* margin left for cards in enemyhand */
+	--marginCard: 500px;
+	--redSuit: red;
+	--blackSuit: black;
+}
+
+body {
+	user-select: none;
+	overflow-x: hidden;
+	/* overflow-y: hidden; */
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	background-image: url(../images/bg.jpg);
+}
+
+.modalStart {
+	height: 100vh;
+	display: flex;
+	margin-top: 0vh;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+}
+
+.modalStart img {
+	position: fixed;
+	z-index: -1;
+}
+.modalStart #start {
+	color: white;
+	font-size: 34px;
+	font-weight: bold;
+	padding-top: 120px;
+}
+
+.modalStart button {
+	background: blue;
+	position: absolute;
+	font-size: 34px;
+	font-weight: bold;
+	color: white;
+	outline: none;
+	top: 65%;
+	border: none;
+	padding: 10px;
+}
+
+.playground {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	color: aliceblue;
+	font-size: 30px;
+	display: grid;
+	/* display: none; */
+	margin: 0;
+	padding: 0;
+	grid-template-columns: 15% 70% 15%;
+	grid-template-rows: 30% 40% 30%;
+	grid-template-areas: "header header header" "enemyChest deck playerChest" "footer footer footer";
+}
+
+.playground .enemyHand {
+	height: 100%;
+	width: 100%;
+	grid-area: header;
+	justify-self: center;
+	align-items: center;
+}
+
+.playground .enemyHand ul {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.playground .enemyHand ul li {
+	position: absolute;
+	top: 10px;
+}
+
+.playground p {
+	position: absolute;
+	top: 10px;
+	left: 1200px;
+}
+
+.card1 {
+	left: calc(var(--marginCard) + 100px);
+}
+
+.card2 {
+	left: calc(var(--marginCard) + 150px);
+}
+
+.card3 {
+	left: calc(var(--marginCard) + 200px);
+}
+
+.card4 {
+	left: calc(var(--marginCard) + 250px);
+}
+
+.card5 {
+	left: calc(var(--marginCard) + 300px);
+}
+
+.card6 {
+	left: calc(var(--marginCard) + 350px);
+}
+
+.card7 {
+	left: calc(var(--marginCard) + 400px);
+}
+
+.playground .deck {
+	grid-area: deck;
+	position: relative;
+	justify-self: center;
+	align-self: center;
+}
+
+.playground .deck img {
+	display: block;
+}
+
+.playground .deck p {
+	position: absolute;
+	font-size: 40px;
+	color: white;
+	top: 145px;
+	left: 63px;
+}
+
+.playground .enemyChest {
+	position: relative;
+	grid-area: enemyChest;
+	align-self: center;
+}
+
+.playground .enemyChest p {
+	color: red;
+	position: absolute;
+	top: -75px;
+	left: 15px;
+}
+
+.playground .playerChest {
+	position: relative;
+	grid-area: playerChest;
+	align-self: center;
+}
+
+.playground .playerChest p {
+	color: white;
+	top: -75px;
+	left: 30px;
+}
+
+.playground .playerHand {
+	grid-area: footer;
+	height: 100%;
+	width: 100%;
+	justify-self: center;
+	align-self: center;
+	position: relative;
+}
+
+.playground .playerHand ul {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.playground .playerHand ul li {
+	position: absolute;
+	top: 10px;
+}
+
+.playground .playerHand ul li .card {
+	position: absolute;
+	border: 1px solid black;
+	border-radius: 10px;
+	width: 190px;
+	height: 260px;
+	background: white;
+}
+
+.playground .playerHand ul li .card .suitvalue {
+	line-height: 70%;
+	color: black;
+	font-size: 50px;
+	position: absolute;
+	top: -40px;
+	left: 10px;
+}
+
+.playground .playerHand ul li .card .suitBig {
+	position: absolute;
+	top: -110px;
+	left: 45px;
+	text-align: center;
+	color: black;
+	font-size: 150px;
+}
+
+.playground .playerHand ul li #card1 {
+	left: var(--marginCard);
+}
+
+.playground .playerHand ul li #card2 {
+	left: calc(var(--marginCard) + 60px);
+}
+
+.playground .playerHand ul li #card3 {
+	left: calc(var(--marginCard) + 120px);
+}
+
+.playground .playerHand ul li #card4 {
+	left: calc(var(--marginCard) + 180px);
+}
+
+.playground .playerHand ul li #card5 {
+	left: calc(var(--marginCard) + 240px);
+}
+
+.playground .playerHand ul li #card6 {
+	left: calc(var(--marginCard) + 300px);
+}
+
+.playground .playerHand ul li #card7 {
+	left: calc(var(--marginCard) + 360px);
+}
+
+.playground .playerHand ul li #card8 {
+	left: calc(var(--marginCard) + 420px);
+}
+
+.playground .playerHand ul li #card9 {
+	left: calc(var(--marginCard) + 480px);
+}
+
+.playground .playerHand ul li #card10 {
+	left: calc(var(--marginCard) + 540px);
+}
+
+.playground .playerHand ul li #card11 {
+	left: calc(var(--marginCard) + 600px);
+}
+
+.playground .playerHand ul li #card12 {
+	left: calc(var(--marginCard) + 660px);
+}
+
+.playground .playerHand ul li #card13 {
+	left: calc(var(--marginCard) + 720px);
+}
+
+.playground .playerHand ul li #card14 {
+	left: calc(var(--marginCard) + 780px);
+}
+
+.playground .playerHand ul li #card15 {
+	left: calc(var(--marginCard) + 840px);
+}
+
+.playground .playerHand ul li #card16 {
+	left: calc(var(--marginCard) + 900px);
+}
+
+.playground .playerHand ul li #card17 {
+	left: calc(var(--marginCard) + 960px);
+}
+
+.playground .playerHand ul li #card18 {
+	left: calc(var(--marginCard) + 1020px);
+}
+
+.playground .playerHand ul li #card19 {
+	left: calc(var(--marginCard) + 1080px);
+}
