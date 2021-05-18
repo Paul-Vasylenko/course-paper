@@ -1,5 +1,7 @@
 import { createElement } from "./helpers/domHelper.js";
-import {createInnerPlayedHand} from './renderingHtml.js'
+import {createInnerPlayedHand,
+        createPlayground,
+        createInnerEnemyHand} from './renderingHtml.js'
 
 export class Interface{
     constructor(){
@@ -11,26 +13,7 @@ export class Interface{
         if(checkDeck[0]){
             checkDeck[0].remove();
         }
-        let playground = createElement({
-            tagName: 'div',
-            className: 'playground'
-        })
-        let deckDiv = createElement({
-            tagName: 'div',
-            className: 'deck'
-        })
-        let deckPicImg = createElement({
-            tagName: 'img',
-            attributes:{
-                src:"images/cardForPlayer1.png",
-            }
-        })
-        let deckPicP = createElement({
-            tagName: 'p'
-        })
-        deckPicP.innerText = deck.numberOfCards;
-        deckDiv.append(deckPicImg,deckPicP);
-        playground.appendChild(deckDiv)
+        let playground = createPlayground(deck)
         Interface.rootElement.append(playground)
         myInterface.renderDeck(deck);
 
@@ -57,6 +40,16 @@ export class Interface{
         const playerHandDiv = document.querySelector(".playerHand");
         playerHandDiv.innerHTML = "";
         createInnerPlayedHand(playerHand, playerHandDiv);
+    }
+    createEnemyHand(playerHand){
+        let enemyHandDiv = createInnerEnemyHand(playerHand);
+        const playground = document.getElementsByClassName('playground')[0];
+        playground.append(enemyHandDiv)
+    }
+    renderEnemyHand(playerHand){
+        const playerHandDiv = document.querySelector(".enemyHand");
+        playerHandDiv.innerHTML = "";
+        createInnerEnemyHand(playerHand, playerHandDiv)
     }
 }
 

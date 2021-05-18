@@ -17,6 +17,9 @@ class App{
         showStartModal(() => {
             myInterface.createDeck(deck);
             myInterface.createPlayerHand(playerOneHand);
+            myInterface.createEnemyHand(playerTwoHand);
+            myInterface.renderEnemyHand(playerTwoHand)
+
         });
         console.log(deck);
     }

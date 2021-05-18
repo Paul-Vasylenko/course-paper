@@ -98,32 +98,32 @@ body {
 	left: 1200px;
 }
 
-.card1 {
-	left: calc(var(--marginCard) + 100px);
+.enemyHand ul li.card1 {
+	left: calc(var(--marginCard) + 500px);
 }
 
-.card2 {
-	left: calc(var(--marginCard) + 150px);
+.enemyHand ul li.card2 {
+	left: calc(var(--marginCard) + 550px);
 }
 
-.card3 {
-	left: calc(var(--marginCard) + 200px);
+.enemyHand ul li.card3 {
+	left: calc(var(--marginCard) + 600px);
 }
 
-.card4 {
-	left: calc(var(--marginCard) + 250px);
+.enemyHand ul li.card4 {
+	left: calc(var(--marginCard) + 650px);
 }
 
-.card5 {
-	left: calc(var(--marginCard) + 300px);
+.enemyHand ul li.card5 {
+	left: calc(var(--marginCard) + 700px);
 }
 
-.card6 {
-	left: calc(var(--marginCard) + 350px);
+.enemyHand ul li.card6 {
+	left: calc(var(--marginCard) + 750px);
 }
 
-.card7 {
-	left: calc(var(--marginCard) + 400px);
+.enemyHand ul li.card7 {
+	left: calc(var(--marginCard) + 800px);
 }
 
 .playground .deck {

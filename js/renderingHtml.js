@@ -1,5 +1,29 @@
 import {createElement} from './helpers/domHelper.js';
 
+export function createPlayground(deck){
+    let playground = createElement({
+        tagName: 'div',
+        className: 'playground'
+    })
+    let deckDiv = createElement({
+        tagName: 'div',
+        className: 'deck'
+    })
+    let deckPicImg = createElement({
+        tagName: 'img',
+        attributes:{
+            src:"images/cardForPlayer1.png",
+        }
+    })
+    let deckPicP = createElement({
+        tagName: 'p'
+    })
+    deckPicP.innerText = deck.numberOfCards;
+    deckDiv.append(deckPicImg,deckPicP);
+    playground.appendChild(deckDiv)
+    return playground;
+}
+
 export function createInnerPlayedHand(playerHand,playerHandDiv){
     let playerHandUl = createElement({
         tagName: 'ul',
@@ -42,9 +66,67 @@ return playerHandDiv;
 
 }
 
+export function createInnerEnemyHand(enemyHand, enemyHandDiv1){
+    let enemyHandDiv = enemyHandDiv1
+    if(!enemyHandDiv1){
+            enemyHandDiv = createElement({
+            tagName: 'div',
+            className:"enemyHand"
+        })
+        
+    }
+    let enemyHandUl = createElement({
+        tagName: 'ul',
+    })
+    if (enemyHand.numberOfCards >= 7) {
+        for (let i = 1; i < 8; i++) {
+            renderNumberOfCardsEnemy(enemyHandUl,i)
+        }
+        let enemyHandPre = createElement({
+            tagName: 'pre',
+        })
+        let enemyHandP = createElement({
+            tagName: 'p',
+        })
+        enemyHandP.innerHTML = `У противника <br>    <span>${enemyHand.numberOfCards}</span> карт`;
+        enemyHandPre.append(enemyHandP);
+        enemyHandDiv.append(enemyHandUl);
+        enemyHandDiv.append(enemyHandPre);
+    } else if (enemyHand.numberOfCards < 7) {
+        for (let i = 1; i < enemyHand.numberOfCards+1; i++) {
+        renderNumberOfCardsEnemy(enemyHandUl,i)
+        }
+        let enemyHandPre = createElement({
+            tagName: 'pre',
+        })
+        let enemyHandP = createElement({
+            tagName: 'p',
+        })
+        enemyHandP.innerHTML = `У противника <br>    <span>${enemyHand.numberOfCards}</span> карт`;
+        enemyHandPre.append(enemyHandP);
+        enemyHandDiv.append(enemyHandUl);
+        enemyHandDiv.append(enemyHandPre);
+    }
+    return enemyHandDiv
+}
+
+function renderNumberOfCardsEnemy(enemyHandUl,i){
+        let enemyHandLi = createElement({
+            tagName: 'li',
+            className:"card"+i
+        })
+        let enemyHandImg = createElement({
+            tagName: 'img',
+            attributes:{
+                src:'images/cardForPlayer1.png'
+            }
+        })
+        enemyHandLi.append(enemyHandImg);
+        enemyHandUl.append(enemyHandLi);
+    
+}
+
 function renderEnemyHand(enemyHand) {
-    let enemyHandDiv = document.querySelector(".enemyHand");
-    let enemyHandUl = document.createElement("ul");
     if (enemyHand.numberOfCards >= 7) {
         for (let i = 1; i < 8; i++) {
             let enemyHandLi = document.createElement("li");
