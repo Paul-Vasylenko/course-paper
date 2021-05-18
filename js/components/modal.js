@@ -1,18 +1,13 @@
 //TODO: add showModal functions
 import {createElement} from '../helpers/domHelper.js'
 
-export function showStartModal(onClose){
-    const root = getModalContainer();
-    const modal = createStartModal(onClose);
 
-    root.append(modal);
-}
 
-function getModalContainer(){
+export function getModalContainer(){
     return document.getElementById('root');
 }
 
-function createStartModal(onClose){
+export function createStartModal(onClose){
     let modalStart = createElement({
         tagName: "div",
         className:"modalStart"

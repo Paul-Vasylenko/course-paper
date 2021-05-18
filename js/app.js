@@ -1,4 +1,3 @@
-import { showStartModal } from './components/modal.js';
 import {Deck, PlayerHand} from './deck.js'
 import { myInterface } from './interface.js';
 
@@ -14,7 +13,7 @@ class App{
         const playerOneHand = new PlayerHand(deck);
         const playerTwoHand = new PlayerHand(deck); 
         
-        showStartModal(() => {
+        myInterface.showStartModal(() => {
             myInterface.createDeck(deck);
             myInterface.createPlayerHand(playerOneHand);
             myInterface.createEnemyHand(playerTwoHand);

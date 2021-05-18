@@ -2,6 +2,8 @@ import { createElement } from "./helpers/domHelper.js";
 import {createInnerPlayedHand,
         createPlayground,
         createInnerEnemyHand} from './renderingHtml.js'
+import {getModalContainer, createStartModal} from './components/modal.js'
+
 
 export class Interface{
     constructor(){
@@ -50,6 +52,12 @@ export class Interface{
         const playerHandDiv = document.querySelector(".enemyHand");
         playerHandDiv.innerHTML = "";
         createInnerEnemyHand(playerHand, playerHandDiv)
+    }
+    showStartModal(onClose){
+        const root = getModalContainer();
+        const modal = createStartModal(onClose);
+    
+        root.append(modal);
     }
 }
 
