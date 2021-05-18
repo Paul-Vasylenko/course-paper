@@ -1,6 +1,6 @@
 import { showStartModal } from './components/modal.js';
 import {Deck, PlayerHand} from './deck.js'
-import { createElement } from './helpers/domHelper.js';
+import { myInterface } from './interface.js';
 
 
 class App{
@@ -13,12 +13,11 @@ class App{
         deck.shuffle();
         const playerOneHand = new PlayerHand(deck);
         const playerTwoHand = new PlayerHand(deck); 
-        /*<div class="modalStart">
-            <img src="images/message_bg.jpg" alt="">
-            <p id="start">Начните игру!</p>
-            <button>Start!</button>
-        </div> */
-        showStartModal(() => {});
+        
+        showStartModal(() => {
+            myInterface.createDeck(deck);
+            myInterface.createPlayerHand(playerOneHand);
+        });
         console.log(deck);
     }
 }

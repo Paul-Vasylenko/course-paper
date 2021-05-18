@@ -1,11 +1,45 @@
-function renderDeck(deck) {
-    let deckPic = document.querySelector(".deck");
-    let deckPicImg = document.createElement("img");
-    deckPicImg.setAttribute('src', 'images/cardForPlayer1.png')
-    let deckPicP = document.createElement("p");
-    deckPicP.innerText = deck.numberOfCards;
-    deckPic.appendChild(deckPicImg);
-    deckPic.appendChild(deckPicP);
+import {createElement} from './helpers/domHelper.js';
+
+export function createInnerPlayedHand(playerHand,playerHandDiv){
+    let playerHandUl = createElement({
+        tagName: 'ul',
+    })
+    for (let i = 1; i < playerHand.numberOfCards + 1; i++) {
+        let playerHandLi = createElement({
+            tagName: 'li',
+        })
+        let playerHandCardDiv = createElement({
+            tagName: 'div',
+            className: "card",
+            attributes:{
+                id: "card"+i,
+            }
+        })
+        let playerHandCardSuitValue = createElement({
+            tagName: 'p',
+            className: "suitvalue",
+        })
+        playerHandCardSuitValue.innerHTML = playerHand.cards[i - 1].value + "<br>" + playerHand.cards[i - 1].suit;
+        let playerHandCardSuitBig = createElement({
+            tagName: 'p',
+            className: "suitBig",
+        })
+        playerHandCardSuitBig.innerText = playerHand.cards[i - 1].suit;
+        if (playerHand.cards[i - 1].suit == '♥' || playerHand.cards[i - 1].suit == '♦') {
+            playerHandCardSuitValue.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--redSuit');
+            playerHandCardSuitBig.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--redSuit');
+        } else {
+            playerHandCardSuitValue.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--blackSuit');
+            playerHandCardSuitBig.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--blackSuit');
+        }
+
+        playerHandCardDiv.append(playerHandCardSuitValue,playerHandCardSuitBig);
+        playerHandLi.appendChild(playerHandCardDiv);
+        playerHandUl.appendChild(playerHandLi);
+}
+playerHandDiv.appendChild(playerHandUl);
+return playerHandDiv;
+
 }
 
 function renderEnemyHand(enemyHand) {
@@ -43,36 +77,4 @@ function renderEnemyHand(enemyHand) {
         enemyHandDiv.appendChild(enemyHandUl);
         enemyHandDiv.appendChild(enemyHandPre);
     }
-}
-
-
-function renderPlayerHand(playerHand) {
-    let playerHandDiv = document.querySelector(".playerHand");
-    let playerHandUl = document.createElement("ul");
-    for (let i = 1; i < playerHand.numberOfCards + 1; i++) {
-        let playerHandLi = document.createElement("li");
-        let playerHandCardDiv = document.createElement("div");
-        playerHandCardDiv.classList.add("card")
-        playerHandCardDiv.id = "card" + i;
-        let playerHandCardSuitValue = document.createElement("p");
-        playerHandCardSuitValue.classList.add("suitvalue");
-        playerHandCardSuitValue.innerHTML = playerHand.cards[i - 1].value + "<br>" + playerHand.cards[i - 1].suit;
-        let playerHandCardSuitBig = document.createElement("p");
-        playerHandCardSuitBig.innerText = playerHand.cards[i - 1].suit;
-        playerHandCardSuitBig.classList.add("suitBig");
-
-        if (playerHand.cards[i - 1].suit == '♥' || playerHand.cards[i - 1].suit == '♦') {
-            playerHandCardSuitValue.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--redSuit');
-            playerHandCardSuitBig.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--redSuit');
-        } else {
-            playerHandCardSuitValue.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--blackSuit');
-            playerHandCardSuitBig.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--blackSuit');
-        }
-
-        playerHandCardDiv.appendChild(playerHandCardSuitValue);
-        playerHandCardDiv.appendChild(playerHandCardSuitBig);
-        playerHandLi.appendChild(playerHandCardDiv);
-        playerHandUl.appendChild(playerHandLi);
-    }
-    playerHandDiv.appendChild(playerHandUl);
 }

@@ -6,11 +6,13 @@
 
 :root {
 	/* margin left for cards in enemyhand */
-	--marginCard: 500px;
+	--marginCard: 100px;
 	--redSuit: red;
 	--blackSuit: black;
 }
-
+#root {
+	height: 100vh;
+}
 body {
 	user-select: none;
 	overflow-x: hidden;
@@ -196,7 +198,7 @@ body {
 	border: 1px solid black;
 	border-radius: 10px;
 	width: 190px;
-	height: 260px;
+	height: 245px;
 	background: white;
 }
 
@@ -292,4 +294,24 @@ body {
 
 .playground .playerHand ul li #card19 {
 	left: calc(var(--marginCard) + 1080px);
+}
+
+.playground .playerHand ul li #card20 {
+	left: calc(var(--marginCard) + 1140px);
+}
+
+.playground .playerHand ul li #card21 {
+	left: calc(var(--marginCard) + 1200px);
+}
+
+.playground .playerHand ul li #card22 {
+	left: calc(var(--marginCard) + 1260px);
+}
+
+.playground .playerHand ul li #card23 {
+	left: calc(var(--marginCard) + 1320px);
+}
+
+.playground .playerHand ul li #card24 {
+	left: calc(var(--marginCard) + 1380px);
 }
