@@ -25,17 +25,33 @@ export class Gameprocess{
 
         }
         let choosedCard;
+        console.log(playerTwoHand.cards);
         cardChoose.onchange = (e) => {
             e.srcElement.disabled = "true"
             choosedCard = e.srcElement.value;
             addAction(`You choosed ${choosedCard}`)
             if(playerTwoHand.checkCard(choosedCard)){
-                console.log('Found')
+                addAction(`How many?  <select name="numberCards" size="1" required autofocus>
+                
+                </select>`)
+                const numberChoose = logs.querySelector("select[name=numberCards]")
+                numberChoose.innerHTML = `
+                <option disabled selected></option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+
+                `
             }
             else{
-                console.log('Not found');
+                addAction("You didn't guess.")
+                addAction("<strong>Enemy turn</strong>")
+                this.enemyTurn();
             }
         }
+    }
+    enemyTurn(){
+        console.log('Enemy turn');
     }
     startGame(playerOneHand,playerTwoHand){
         addAction("<strong>Your turn!</strong>")
