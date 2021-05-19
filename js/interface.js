@@ -8,6 +8,8 @@ import {getModalContainer, createStartModal} from './components/modal.js'
 export class Interface{
     constructor(){
         this.status = 200;
+        this.playerChests = 0;
+        this.enemyChests = 0;
     }
     static rootElement = document.getElementById('root');
     createDeck(deck) {
@@ -58,6 +60,48 @@ export class Interface{
         const modal = createStartModal(onClose);
     
         root.append(modal);
+    }
+    createChest(player){
+        let chestBlock;
+        let chestP = createElement({
+            tagName:'p'
+        })
+        if(player=='1'){
+                chestBlock = createElement({
+                tagName: 'div',
+                className: 'playerChest chest'
+            })
+            chestP.innerHTML = `У вас <span>0</span> скарбничок`;
+        }
+        else if(player == '2'){
+            chestBlock = createElement({
+                tagName: 'div',
+                className: 'enemyChest chest'
+            })
+            chestP.innerHTML = `У противника <span>0</span> скарбничок`;
+        }
+        
+        let chestImg = createElement({
+            tagName: 'img',
+            attributes:{
+                src:"images/chest.png",
+                alt:"chest"
+            }
+        })
+        chestBlock.append(chestP,chestImg)
+        document.getElementsByClassName('playground')[0].append(chestBlock)
+    }
+    renderChest(player, playerHand){
+        let chestP
+        if(player=='1'){
+            chestP = document.querySelector('.playerHand p')   
+        chestP.innerHTML = `У вас <span>${playerHand.numberOfCards}</span> скарбничок`
+
+        }
+        else if(player == '2'){
+        chestP = document.querySelector('.enemyHand p')
+        chestP.innerHTML = `У противника <span>${playerHand.numberOfCards}</span> скарбничок`
+        }
     }
 }
 

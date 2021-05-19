@@ -18,8 +18,17 @@ export function createPlayground(deck){
     let deckPicP = createElement({
         tagName: 'p'
     })
+    let backlog = createElement({
+        tagName: 'div',
+        className: "backlog"
+    })
+    let backlogP = createElement({
+        tagName: 'p',
+    })
     deckPicP.innerText = deck.numberOfCards;
     deckDiv.append(deckPicImg,deckPicP);
+    backlog.append(backlogP)
+    playground.append(backlog)
     playground.appendChild(deckDiv)
     return playground;
 }

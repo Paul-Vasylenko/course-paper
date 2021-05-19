@@ -65,9 +65,9 @@ body {
 	/* display: none; */
 	margin: 0;
 	padding: 0;
-	grid-template-columns: 15% 70% 15%;
+	grid-template-columns: 27% 38% 34%;
 	grid-template-rows: 30% 40% 30%;
-	grid-template-areas: "header header header" "enemyChest deck playerChest" "footer footer footer";
+	grid-template-areas: "backlog header header" "enemyChest deck playerChest" "footer footer footer";
 }
 
 .playground .enemyHand {
@@ -126,6 +126,24 @@ body {
 	left: calc(var(--marginCard) + 800px);
 }
 
+.playground .backlog {
+	background-color: #fff;
+	height: 182px;
+	width: 500px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	padding: 5px;
+}
+.playground .backlog p {
+	position: relative;
+	top: 0;
+	left: 0;
+	color: black;
+	display: inline-block;
+	width: 100%;
+	word-wrap: break-word;
+	font-size: 18px;
+}
 .playground .deck {
 	grid-area: deck;
 	position: relative;
@@ -154,14 +172,17 @@ body {
 .playground .enemyChest p {
 	color: red;
 	position: absolute;
-	top: -75px;
+	top: 165px;
 	left: 15px;
 }
-
+.playground .chest img {
+	width: 200px;
+}
 .playground .playerChest {
 	position: relative;
 	grid-area: playerChest;
 	align-self: center;
+	justify-self: flex-end;
 }
 
 .playground .playerChest p {

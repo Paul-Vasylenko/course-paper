@@ -1,5 +1,5 @@
 const SUITS = ["♠", "♣", "♥", "♦"]
-const VALUES = ["6", "7", "8", "9", "10", "J", "Q", "K", "A"]
+export const VALUES = ["6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
 export class Deck {
     constructor(cards = freshDeck()) {
@@ -35,6 +35,16 @@ export class PlayerHand {
 
     get numberOfCards() {
         return this.cards.length;
+    }
+    get cardValues(){
+        let cardValuesArr = this.cards.map(item => {
+            return item.value
+        })
+        return cardValuesArr;
+    }
+    checkCard(value){
+        const found = this.cardValues.find(item => item==value)
+        return found;
     }
 }
 
