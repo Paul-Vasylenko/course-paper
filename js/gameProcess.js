@@ -3,6 +3,7 @@ import {myInterface} from './interface.js';
 export class Gameprocess{
     constructor(playerOneHand,playerTwoHand,deck){
         this.deck = deck;
+        this.imagineHand = [];
         this.startGame(playerOneHand,playerTwoHand);
     }
     static rootElement = document.getElementById('root');
@@ -35,7 +36,6 @@ export class Gameprocess{
             console.log(playerTwoHand.cards[i]);
         }
         cardChoose.onchange = (e) => {
-            console.log(e)
             e.srcElement.disabled = "true"
             choosedCard = e.srcElement.value;
             addAction(`You choosed ${choosedCard}`)
@@ -76,7 +76,8 @@ export class Gameprocess{
                                 e.srcElement.size = "1";
                                 addAction(`You choosed ${suitsChoosed.join(' ')}`)
                                 this.getEnemyCards(playerOneHand,playerTwoHand,suitsChoosed,choosedCard, 'player1');
-                                this.enemyTurn();
+                                this.imagineHand.push(choosedCard+"?");
+                                this.enemyTurn(playerOneHand,playerTwoHand);
                             }
                         }
                         
@@ -85,20 +86,32 @@ export class Gameprocess{
                     else{
                     addAction(`You didn't guess`)
                     this.playerTakeCard(playerOneHand, 'player1')
-                    this.enemyTurn();
+                    this.enemyTurn(playerOneHand,playerTwoHand);
+                    this.imagineHand.push(choosedCard+"?");
                     }
                 }
             }
             else{
                 addAction("You didn't guess.")
                 this.playerTakeCard(playerOneHand, 'player1')
-                this.enemyTurn();
+                this.imagineHand.push(choosedCard+"?");
+                this.enemyTurn(playerOneHand,playerTwoHand);
             }
         }
     }
-    enemyTurn(){
-        
+    enemyTurn(playerOneHand,playerTwoHand){
         addAction("<strong>Enemy turn</strong><br>")
+        console.log(this.imagineHand)
+
+        while(playerTwoHand.cards.length!=4){
+            this.playerTakeCard(playerTwoHand, 'player2')
+        }
+        myInterface.renderEnemyHand(playerTwoHand)
+        myInterface.renderPlayerHand(playerOneHand)
+        console.group('new hand:');
+        for(let i in playerTwoHand.cards){
+            console.log(playerTwoHand.cards[i]);
+        }
     }
     getEnemyCards(toHand,fromHand,suits, value, player){
         let actionText = ""
@@ -115,6 +128,7 @@ export class Gameprocess{
                 const guessedCard = fromHand.getCard(value, suit);
                 actionText += value+suit+", "
                 counter++;
+                this.imagineHand.push(value + suit)
                 toHand.addCard(guessedCard)
             }
         }
@@ -129,9 +143,13 @@ export class Gameprocess{
                 this.playerTakeCard(toHand, 'player1')
                 }
             }
+            myInterface.renderPlayerHand(toHand)
+            myInterface.renderEnemyHand(fromHand)
         }
-        myInterface.renderPlayerHand(toHand)
-        myInterface.renderEnemyHand(fromHand)
+        else{
+            myInterface.renderPlayerHand(fromHand)
+            myInterface.renderEnemyHand(toHand)
+        }
 
     }
     startGame(playerOneHand,playerTwoHand){
@@ -148,6 +166,24 @@ export class Gameprocess{
         else{
             addAction(`Enemy took a card: `+playerHand.cards[playerHand.cards.length-1].value+
             playerHand.cards[playerHand.cards.length-1].suit)
+        }
+        myInterface.renderDeck(this.deck)
+    }
+    getCardPriority(cardValue, priority, playerHand){
+        let newPriority = priority;
+        let numberInHand = playerHand.countNumberOfCard(cardValue);
+        let numberInImagine = 0;
+        this.imagineHand.forEach((item)=>{
+            if(item[0]==cardValue.toString()[0]){
+                numberInImagine++;
+            }
+        })
+        if(numberInHand+numberInImagine == 4){
+            newPriority=10000
+            return [cardValue,newPriority];
+        }
+        else{
+            //надо думац..
         }
     }
 }

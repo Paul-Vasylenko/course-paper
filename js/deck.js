@@ -95,5 +95,5 @@ function freshDeck() {
 }
 //function to take 1 cards from the deck "deck"
 export function takeCard(deck) {
-    return deck.cards.pop();
+    return deck.cards.length>0?deck.cards.pop():undefined;
 }
