@@ -1,4 +1,4 @@
-const SUITS = ["♠", "♣", "♥", "♦"]
+export const SUITS = ["♠", "♣", "♥", "♦"]
 export const VALUES = ["6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
 export class Deck {
@@ -42,9 +42,47 @@ export class PlayerHand {
         })
         return cardValuesArr;
     }
-    checkCard(value){
+    checkCardValue(value){
         const found = this.cardValues.find(item => item==value)
         return found;
+    }
+    countNumberOfCard(value){
+        let result = 0;
+        this.cardValues.filter(item => {
+            if(item==value){
+                result++;
+                return item;
+            }
+        });
+        return result
+    }
+    getCardSuits(value){
+        return this.cards.map(item => {
+            if(item.value == value){
+                return item.suit
+            }
+        }) 
+    }
+    checkCard(value,suit){
+        for(let i in this.cards){
+            if(this.cards[i].value == value && this.cards[i].suit == suit){
+                return true
+            }
+        }
+    }
+    //get card from enemy hand
+    getCard(value,suit){
+        for(let i in this.cards){
+            if(this.cards[i].value == value && this.cards[i].suit == suit){
+                let toReturn = this.cards[i]
+                this.cards.splice(i,1);
+                return toReturn;
+            }
+        }
+    }
+    //put a card into your hand
+    addCard(card){
+        this.cards.push(card);
     }
 }
 

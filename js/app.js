@@ -19,7 +19,7 @@ class App{
             myInterface.createEnemyHand(playerTwoHand);
             myInterface.createChest('1')
             myInterface.createChest('2')
-            const gameProcess = new Gameprocess(playerOneHand,playerTwoHand);
+            const gameProcess = new Gameprocess(playerOneHand,playerTwoHand,deck);
         })
         
 
