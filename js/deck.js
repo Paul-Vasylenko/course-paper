@@ -28,6 +28,7 @@ export class PlayerHand {
     // at start there are 4 cards in hand.
     constructor(deck) {
         this.cards = [];
+        this.chestsNum = 0;
         for (let i = 0; i < 4; i++) {
             this.cards.push(takeCard(deck));
         }
@@ -83,6 +84,14 @@ export class PlayerHand {
     //put a card into your hand
     addCard(card){
         this.cards.push(card);
+    }
+    createChest(value){
+        this.cards.forEach(item=>{
+            if(item.value==value){
+                this.cards.splice(i,1);
+            }
+        })
+        this.chestsNum++;
     }
 }
 
