@@ -1,5 +1,5 @@
 import {createElement} from './helpers/domHelper.js';
-
+//створення playground, колоди та backlog 
 export function createPlayground(deck){
     let playground = createElement({
         tagName: 'div',
@@ -32,11 +32,15 @@ export function createPlayground(deck){
     playground.appendChild(deckDiv)
     return playground;
 }
-
+//заповнення руки гравця картами
 export function createInnerPlayedHand(playerHand,playerHandDiv){
     let playerHandUl = createElement({
         tagName: 'ul',
     })
+    if(playerHand.numberOfCards<1){
+        playerHandDiv.appendChild(playerHandUl);
+        return playerHandDiv;
+    }
     for (let i = 1; i < playerHand.numberOfCards + 1; i++) {
         let playerHandLi = createElement({
             tagName: 'li',
@@ -52,13 +56,13 @@ export function createInnerPlayedHand(playerHand,playerHandDiv){
             tagName: 'p',
             className: "suitvalue",
         })
-        playerHandCardSuitValue.innerHTML = playerHand.cards[i - 1].value + "<br>" + playerHand.cards[i - 1].suit;
+        playerHandCardSuitValue.innerHTML = playerHand.cards[i - 1]?.value + "<br>" + playerHand.cards[i - 1]?.suit;
         let playerHandCardSuitBig = createElement({
             tagName: 'p',
             className: "suitBig",
         })
-        playerHandCardSuitBig.innerText = playerHand.cards[i - 1].suit;
-        if (playerHand.cards[i - 1].suit == '♥' || playerHand.cards[i - 1].suit == '♦') {
+        playerHandCardSuitBig.innerText = playerHand.cards[i - 1]?.suit;
+        if (playerHand.cards[i - 1]?.suit == '♥' || playerHand.cards[i - 1]?.suit == '♦') {
             playerHandCardSuitValue.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--redSuit');
             playerHandCardSuitBig.style.color = window.getComputedStyle(document.documentElement).getPropertyValue('--redSuit');
         } else {
@@ -74,7 +78,7 @@ playerHandDiv.appendChild(playerHandUl);
 return playerHandDiv;
 
 }
-
+//заповнення руки ворога картами
 export function createInnerEnemyHand(enemyHand, enemyHandDiv1){
     let enemyHandDiv = enemyHandDiv1
     if(!enemyHandDiv1){
@@ -118,7 +122,7 @@ export function createInnerEnemyHand(enemyHand, enemyHandDiv1){
     }
     return enemyHandDiv
 }
-
+//оновлення кількості карт ворога
 function renderNumberOfCardsEnemy(enemyHandUl,i){
         let enemyHandLi = createElement({
             tagName: 'li',
@@ -134,8 +138,8 @@ function renderNumberOfCardsEnemy(enemyHandUl,i){
         enemyHandUl.append(enemyHandLi);
     
 }
-
-function renderEnemyHand(enemyHand) {
+//оновлення руки ворога
+export function renderEnemyHand(enemyHand) {
     if (enemyHand.numberOfCards >= 7) {
         for (let i = 1; i < 8; i++) {
             let enemyHandLi = document.createElement("li");

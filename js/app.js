@@ -2,11 +2,13 @@ import {Deck, PlayerHand} from './deck.js'
 import { myInterface } from './interface.js';
 import {Gameprocess} from './gameProcess.js';
 
+//Клас додатку
 class App{
     constructor() {
         this.startApp();
     }
     static rootElement = document.getElementById('root');
+    //метод початку гри
     startApp(){
         const deck = new Deck();
         deck.shuffle();
@@ -14,12 +16,13 @@ class App{
         const playerTwoHand = new PlayerHand(deck); 
         
         myInterface.showStartModal(() => {
-            myInterface.createDeck(deck);
+            myInterface.createStarter(deck);
             myInterface.createPlayerHand(playerOneHand);
             myInterface.createEnemyHand(playerTwoHand);
-            myInterface.createChest('1')
-            myInterface.createChest('2')
+            myInterface.createChest('1',playerOneHand)
+            myInterface.createChest('2',playerTwoHand)
             const gameProcess = new Gameprocess(playerOneHand,playerTwoHand,deck);
+            console.log(gameProcess.startGame(playerOneHand,playerTwoHand))
         })
         
 
