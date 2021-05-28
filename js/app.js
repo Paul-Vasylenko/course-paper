@@ -1,5 +1,6 @@
-import {Deck, PlayerHand} from './deck.js'
-import { myInterface } from './interface.js';
+import {Deck} from './deck.js'
+import {PlayerHand} from './PlayerHand.js'
+import {myInterface} from './interface.js';
 import {Gameprocess} from './gameProcess.js';
 
 //Клас додатку
@@ -14,7 +15,6 @@ class App{
         deck.shuffle();
         const playerOneHand = new PlayerHand(deck);
         const playerTwoHand = new PlayerHand(deck); 
-        
         myInterface.showStartModal(() => {
             myInterface.createStarter(deck);
             myInterface.createPlayerHand(playerOneHand);
@@ -22,12 +22,10 @@ class App{
             myInterface.createChest('1',playerOneHand)
             myInterface.createChest('2',playerTwoHand)
             const gameProcess = new Gameprocess(playerOneHand,playerTwoHand,deck);
-            console.log(gameProcess.startGame(playerOneHand,playerTwoHand))
+            gameProcess.startGame(playerOneHand,playerTwoHand)
         })
-        
 
-        
-        console.log(deck);
+        //console.log(deck);
     }
 }
 

@@ -1,4 +1,4 @@
-import {createElement} from './helpers/domHelper.js';
+import {createElement} from './domHelper.js';
 //створення playground, колоди та backlog 
 export function createPlayground(deck){
     let playground = createElement({
