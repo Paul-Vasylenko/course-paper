@@ -1,15 +1,18 @@
-import {VALUES, SUITS, takeCard} from './deck.js';
+import {VALUES, SUITS} from './deck.js';
 import {myInterface} from './interface.js';
+import {ImagineHandCard} from './imagineHandCard.js'
 export class Gameprocess{
     constructor(playerOneHand,playerTwoHand,deck){
         this.deck = deck;
         this.imagineHand = [];
         this.lastused=[];
+        this.playerOneHand = playerOneHand;
+        this.playerTwoHand = playerTwoHand;
     }
     static rootElement = document.getElementById('root');
-    
-    async playerTurn(playerOneHand,playerTwoHand){
-            addAction(`<strong>Your turn</strong><br>`)
+    //хід гравця
+    playerTurn(playerOneHand,playerTwoHand){
+            myInterface.addAction(`<strong>Your turn</strong><br>`)
             while(playerOneHand.cards.length<4 && this.deck.numberOfCards>0){
                 const takenCard = this.playerTakeCard(playerOneHand, 'player1')
                 if(playerOneHand.cards.length==4){
@@ -20,10 +23,13 @@ export class Gameprocess{
     
         const logs = document.querySelector(".backlog p");
     
-            addAction(`Choose a card  <select name="cardValue" size="1"  required autofocus></select>`)
+            myInterface.addAction(`Choose a card  <select name="cardValue" size="1"  required autofocus></select>`)
             const cardChoose = logs.querySelector("select[name=cardValue]")
             cardChoose.innerHTML ="<option disabled selected></option>"
             let cardValues = playerOneHand.cardValues;
+            for(let i=0;i< playerTwoHand.cards.length;i++){
+                console.log(playerTwoHand.cards[i]);
+            }
             for(let i in VALUES){
                 if(cardValues.includes(VALUES[i]))
                 {
@@ -35,15 +41,14 @@ export class Gameprocess{
     
             }
             let choosedCard;
-            for(let i in playerTwoHand.cards){
-                console.log(playerTwoHand.cards[i]);
-            }
+            //При виборі карти
             cardChoose.onchange = (e) => {
                 e.srcElement.disabled = "true"
                 choosedCard = e.srcElement.value;
-                addAction(`You choosed ${choosedCard}`)
+                myInterface.addAction(`You choosed ${choosedCard}`)
+                //Якщо вгадали карту
                 if(playerTwoHand.checkCardValue(choosedCard)){
-                    addAction(`How many?  <select name="numberCards" size="1" required autofocus></select>`)
+                    myInterface.addAction(`How many?  <select name="numberCards" size="1" required autofocus></select>`)
                     const numberChoose = logs.querySelector("select[name=numberCards]")
                     numberChoose.innerHTML = `
                     <option disabled selected></option>
@@ -51,13 +56,15 @@ export class Gameprocess{
                     <option>2</option>
                     <option>3</option>
                     `
+                    //При виборі кількості карт
                     numberChoose.onchange = (e) => {
                         e.srcElement.disabled = "true";
                         const choosedNumber = e.srcElement.value;
-                        addAction(`You choosed ${choosedNumber}`)
+                        myInterface.addAction(`You choosed ${choosedNumber}`)
                         const realNumber = playerTwoHand.countNumberOfCard(choosedCard);
+                        //Якщо вкгадали кількість карт
                         if((+choosedNumber)===realNumber){
-                        addAction(`Choose suits?  <select name="cardSuits" size="2" required autofocus multiple></select>`)
+                        myInterface.addAction(`Choose suits?  <select name="cardSuits" size="2" required autofocus multiple></select>`)
                         const suitsChoose = logs.querySelector("select[name=cardSuits]")
                         suitsChoose.innerHTML = `
                         <option disabled ></option>`
@@ -74,10 +81,11 @@ export class Gameprocess{
                                 suitsChoosed.push(e.srcElement.value)
                                 let choosedSuit = e.srcElement.querySelector(`option[value=${e.srcElement.value}]`)
                                 choosedSuit.disabled="true";
+                                //коли обрали всі масті
                                 if(suitsChoosed.length == choosedNumber){
                                     e.srcElement.disabled = "true";
                                     e.srcElement.size = "1";
-                                    addAction(`You choosed ${suitsChoosed.join(' ')}`)
+                                    myInterface.addAction(`You choosed ${suitsChoosed.join(' ')}`)
                                     this.getEnemyCards(playerOneHand,playerTwoHand,suitsChoosed,choosedCard, 'player1');
                                     this.enemyTurn(playerOneHand,playerTwoHand);
                                 }
@@ -85,7 +93,7 @@ export class Gameprocess{
                         }
                         }
                         else{
-                        addAction(`You didn't guess`)
+                        myInterface.addAction(`You didn't guess`)
                         const takenCard =this.playerTakeCard(playerOneHand, 'player1')
                         this.checkForChest(takenCard, playerOneHand,'1')
                         if(!this.imagineHand.find(item=>{
@@ -99,7 +107,7 @@ export class Gameprocess{
                     
                 }
                 else{
-                    addAction("You didn't guess.")
+                    myInterface.addAction("You didn't guess.")
                     const takenCard = this.playerTakeCard(playerOneHand, 'player1');
                     this.checkForChest(takenCard, playerOneHand,'1')
                     if(!this.imagineHand.find(item=>{
@@ -116,70 +124,99 @@ export class Gameprocess{
             }
         
     }
-    async enemyTurn(playerOneHand,playerTwoHand){
+    //Хід комп'ютера
+    enemyTurn(playerOneHand,playerTwoHand){
+        //дібрати карти якщо їх менше 4
             while(playerTwoHand.cards.length<4 && this.deck.numberOfCards>0){
                 const takenCard = this.playerTakeCard(playerTwoHand, 'player2')
                 this.checkForChest(takenCard, playerTwoHand,'2'); 
             }
-            console.log(playerTwoHand)
-            console.log(this.imagineHand)
-            addAction("<strong>Enemy turn</strong><br>")
+            console.log(this.imagineHand);
+            myInterface.addAction("<strong>Enemy turn</strong><br>")
             let priority = -1;
             let bestCardValue=null;
-            for(let value of VALUES){
-                const newPriority = this.getCardPriority(value, playerTwoHand,'2');
-                if(priority<newPriority){
-                    priority=newPriority;
-                    bestCardValue = value;
+            if(this.deck.cards.length == 0){
+                bestCardValue = playerTwoHand.cards[0].value;
+            }
+            else{
+                //Обрати кращу карту
+                for(let value of VALUES){
+                    const newPriority = this.getCardPriority(value, playerTwoHand,'2');
+                    if(priority<newPriority){
+                        priority=newPriority;
+                        bestCardValue = value;
+                    }
                 }
             }
-            addAction(`Ememy asked ${bestCardValue}`)
+            
+            myInterface.addAction(`Ememy asked ${bestCardValue}`)
             this.addToLastUsed(bestCardValue)
+            //Якщо у гравця є ця карта
             if(playerOneHand.checkCardValue(bestCardValue)){
-                let numberToAsk = this.imagineHand.filter(item=>item.value==bestCardValue).length;
-                if(numberToAsk==0) numberToAsk++;
-                addAction(`Ememy asked ${numberToAsk} cards`)
+                //вгадати кількість
+                let numberToAsk
+                if(this.deck.cards.length==0){
+                    numberToAsk = 4 - playerTwoHand.countNumberOfCard(bestCardValue);
+                }
+                else{
+                    numberToAsk = this.imagineHand.filter(item=>item.value==bestCardValue).length;
+                    if(numberToAsk==0) numberToAsk++;
+                }
+                myInterface.addAction(`Ememy asked ${numberToAsk} cards`)
+                //якщо вгадали кількість
                 if(playerOneHand.countNumberOfCard(bestCardValue) == numberToAsk){
+                    //Намагаємося визначити масть
                     let suitsInHand = playerTwoHand.getCardSuits(bestCardValue);
-                    let suitsInImagineAccurate = this.imagineHand.map(item => {
-                        if(item.value == bestCardValue && item.accurate) return item.suit
-                    })
-                    let suitsInImagineNot = new Set();
-                    let inImagineNotArr=this.imagineHand.map(item=>{
-                        if(item.value == bestCardValue && item.isNot.length!=0){
-                            return item.isNot[0];
-                        }
-                    }); 
-                    
-                   
-                    inImagineNotArr.forEach(item=>{
-                        if(item){
-                            suitsInImagineNot.add(item);
-                        }
-                    })
-                    
-                    inImagineNotArr = Array.from(suitsInImagineNot);
-                    let suitsToAsk = []
-                    for(let suit of SUITS){
-                        if(suitsInImagineAccurate.includes(suit)){
-                            suitsToAsk.push(suit);
-                        }
-                    }
-                    if(suitsToAsk.length != numberToAsk){
+                    let suitsToAsk
+                    if(this.deck.cards.length==0){
+                        suitsToAsk=[];
                         for(let suit of SUITS){
-                            if(suitsToAsk.length == numberToAsk)break;
-                            else{
-                                if(!suitsInHand.includes(suit) && !inImagineNotArr.includes(suit) && !suitsToAsk.includes(suit)){
-                                    suitsToAsk.push(suit)
-                                }
+                            if(!suitsInHand.includes(suit)){
+                                suitsToAsk.push(suit)
                             }
                         }
                     }
+                    else{
+                        let suitsInImagineAccurate = this.imagineHand.map(item => {
+                            if(item.value == bestCardValue && item.accurate) return item.suit
+                        })
+                        let suitsInImagineNot = new Set();
+                        let inImagineNotArr=this.imagineHand.map(item=>{
+                            if(item.value == bestCardValue && item.isNot.length!=0){
+                                return item.isNot[0];
+                            }
+                        }); 
+                        inImagineNotArr.forEach(item=>{
+                            if(item){
+                                suitsInImagineNot.add(item);
+                            }
+                        })
+                        
+                        inImagineNotArr = Array.from(suitsInImagineNot);
+                        suitsToAsk = []
+                        for(let suit of SUITS){
+                            if(suitsInImagineAccurate.includes(suit)){
+                                suitsToAsk.push(suit);
+                            }
+                        }
+                        if(suitsToAsk.length != numberToAsk){
+                            for(let suit of SUITS){
+                                if(suitsToAsk.length == numberToAsk)break;
+                                else{
+                                    if(!suitsInHand.includes(suit) && !inImagineNotArr.includes(suit) && !suitsToAsk.includes(suit)){
+                                        suitsToAsk.push(suit)
+                                    }
+                                }
+                            }
+                        }
+                        //suitsToAsk - масті, що ми запитаємо
+                    }
+                    
                     this.getEnemyCards(playerTwoHand,playerOneHand,suitsToAsk,bestCardValue, 'player2');
                     
                 }
                 else{
-                    addAction("Enemy didn't guess.")
+                    myInterface.addAction("Enemy didn't guess.")
                     let counter = 0;
                     if(this.imagineHand.map(item=>item.value==bestCardValue).length > 1){
                         let i = this.imagineHand.findIndex((item,index)=>{
@@ -213,26 +250,29 @@ export class Gameprocess{
                 }
             }
             else{
-                addAction("Enemy didn't guess.")
+                myInterface.addAction("Enemy didn't guess.")
                 const takenCard = this.playerTakeCard(playerTwoHand, 'player2');
                 this.checkForChest(takenCard, playerTwoHand,'2')
             }
+            //дібрати карти
             while(playerTwoHand.cards.length<4 && this.deck.numberOfCards>0){
                 const takenCard = this.playerTakeCard(playerTwoHand, 'player2')
                 this.checkForChest(takenCard, playerTwoHand,'2'); 
             }
+            //передати хід
             this.playerTurn(playerOneHand,playerTwoHand);
     }
+    //Перевірка наявності карт в руці опонента, та забирання їх в позитивному разі.
     getEnemyCards(toHand,fromHand,suits, value, player){
         let actionText = ""
         for(let suit of suits){
             actionText+= value + suit + ", "
         }
         if(player == 'player1'){
-            addAction("Cards to be checked: "+actionText)
+            myInterface.addAction("Cards to be checked: "+actionText)
         }
         else{
-            addAction("Cards to be checked(enemy): "+actionText)
+            myInterface.addAction("Cards to be checked(enemy): "+actionText)
         }
         actionText = "";
         let counter =0;
@@ -262,7 +302,7 @@ export class Gameprocess{
             }
                 
                 if(counter == 0){
-                    addAction("You didn't guess");
+                    myInterface.addAction("You didn't guess");
                     const takenCard = this.playerTakeCard(toHand, 'player1')
                     this.checkForChest(takenCard, toHand,'1')
                 }
@@ -275,7 +315,7 @@ export class Gameprocess{
                         }
                         
                     }
-                    addAction("You've got cards: "+actionText)
+                    myInterface.addAction("You've got cards: "+actionText)
                     if(counter < suits.length){
                     let takenCard = this.playerTakeCard(toHand, 'player1')
                     this.checkForChest(takenCard, toHand,'1')
@@ -329,13 +369,13 @@ export class Gameprocess{
                 }
             }
                 if(counter == 0){
-                    addAction("Enemy didn't guess");
+                    myInterface.addAction("Enemy didn't guess");
                     const takenCard = this.playerTakeCard(toHand, 'player2')
                     this.checkForChest(takenCard, toHand,'2')
                 }
                 
                 else{
-                    addAction("Enemy got cards: "+actionText)
+                    myInterface.addAction("Enemy got cards: "+actionText)
                     if(counter < suits.length){
                     let takenCard = this.playerTakeCard(toHand, 'player2')
                     this.checkForChest(takenCard, toHand,'2')
@@ -348,32 +388,33 @@ export class Gameprocess{
         
         
     }
+    //початок гри
      startGame(playerOneHand,playerTwoHand){
         let result = this.playerTurn(playerOneHand,playerTwoHand)
-        
-        
     }
+    //Взяти карти для обраного гравця
     playerTakeCard(playerHand, player){
         if(this.deck.numberOfCards>0){
-            playerHand.cards.push(takeCard(this.deck))
+            playerHand.cards.push(this.deck.takeCard())
             if(player == 'player1'){
                 myInterface.renderPlayerHand(playerHand)
-                addAction(`You took a card: `+playerHand.cards[playerHand.numberOfCards-1]?.value+
+                myInterface.addAction(`You took a card: `+playerHand.cards[playerHand.numberOfCards-1]?.value+
                 playerHand.cards[playerHand.numberOfCards-1]?.suit)
             }
             else{
                 myInterface.renderEnemyHand(playerHand)
-                addAction(`Enemy took a card: ${playerHand.cards[playerHand.numberOfCards-1]?.value} ${playerHand.cards[playerHand.numberOfCards-1]?.suit}`)
+                myInterface.addAction(`Enemy took a card: ${playerHand.cards[playerHand.numberOfCards-1]?.value} ${playerHand.cards[playerHand.numberOfCards-1]?.suit}`)
             }
             myInterface.renderDeck(this.deck)
             return playerHand.cards[playerHand.cards.length-1].value;
         }
     }
+    //Вибір кращої карти
     getCardPriority(cardValue, playerHand,player){
         let newPriority = 0;
         let numberInHand = playerHand.countNumberOfCard(cardValue);
         if(numberInHand==0){
-            newPriority=0;
+            newPriority=-1;
         }
         else if(numberInHand==1){
             let cardinlastused = this.lastused.find(item => item==cardValue)
@@ -469,6 +510,7 @@ export class Gameprocess{
 
         return newPriority
     }
+    //Перевірка на наявність скарбнички
     checkForChest(value,playerHand, player){
         let counter=0;
         playerHand.cards.forEach(item=>{
@@ -481,16 +523,29 @@ export class Gameprocess{
             else{
                 myInterface.renderEnemyHand(playerHand)
             }
-            addAction(`You've got a chest from ${value}`)
+            myInterface.addAction(`You've got a chest from ${value}`)
             playerHand.chestsArr.push(value);
             if(this.deck.numberOfCards ==0 && playerHand.cards.length==0){
                 myInterface.status = 204;
+                if(player=='1'){
+                
+                if(playerHand.chestsNum>=5) myInterface.showWinner('1',this.playerOneHand, this.playerTwoHand);
+                else{
+                    myInterface.showWinner('2',this.playerOneHand, this.playerTwoHand);
+                }
             }
-            console.log(myInterface.status);
+                else{
+                    if(playerHand.chestsNum>=5) myInterface.showWinner('2',this.playerOneHand, this.playerTwoHand);
+                    else{
+                        myInterface.showWinner('1',this.playerOneHand, this.playerTwoHand);
+                    }
+                }
+            }
             return true;
         }
         return false;
     }
+    //запам'ятовування, що цю карту було використано в останні 3 ходи
     addToLastUsed(value){
         if(this.lastused.length<3){
             this.lastused.push(value)
@@ -501,20 +556,5 @@ export class Gameprocess{
     }
 }
 
-class ImagineHandCard{
-    constructor(value,accurate,isNot = [], suit){
-        this.value = value;
-        this.accurate = accurate;
-        this.isNot = isNot;
-        if(suit){
-            this.accurate = true;
-            this.suit = suit
-        }
-    }
 
-}
 
-function addAction(message) {
-    const logs = document.querySelector(".backlog p");
-    logs.innerHTML = message + "<br>" + logs.innerHTML
-}
