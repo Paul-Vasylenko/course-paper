@@ -1,12 +1,12 @@
 import { createElement } from "./helpers/domHelper.js";
 import {createInnerPlayedHand,
         createPlayground,
-        createInnerEnemyHand} from './renderingHtml.js'
-import {getModalContainer, createStartModal} from './components/modal.js'
+        createInnerEnemyHand} from './helpers/renderHelper.js'
 
 
 export class Interface{
     constructor(){
+        //200-гра ще йде. 204 - хтось переміг
         this.status = 200;
     }
     static rootElement = document.getElementById('root');
@@ -64,8 +64,8 @@ export class Interface{
     }
     //створення початкового модального вікна
     showStartModal(onClose){
-        const root = getModalContainer();
-        const modal = createStartModal(onClose);
+        const root = this.getModalContainer();
+        const modal = this.createStartModal(onClose);
     
         root.append(modal);
     }
@@ -112,6 +112,101 @@ export class Interface{
         chestP = document.querySelector('.enemyChest p')
         chestP.innerHTML = `У противника <span>${playerHand.chestsNum}</span> скарбничок`
         }
+    }
+    //додати повідомлення у текстове поле
+    addAction(message) {
+        const logs = document.querySelector(".backlog p");
+        if(logs){
+            logs.innerHTML = message + "<br>" + logs.innerHTML
+        }
+    }
+    //отримати кореневий блок
+    getModalContainer(){
+        return document.getElementById('root');
+    }
+    //стоврити стартове модальне вікно
+    createStartModal(onClose){
+        let modalStart = createElement({
+            tagName: "div",
+            className:"modalStart"
+        });
+        let modalImg = createElement({
+            tagName: "img",
+            attributes: {
+                src:"images/message_bg.jpg",
+                alt:"Start"
+            }
+        });
+        let modalP = createElement({
+            tagName: "p",
+            attributes:{id:"start"}
+        });
+        let modalBtn = createElement({
+            tagName: "button",
+        });
+        modalP.innerText = "Почніть гру";
+        modalBtn.innerText = "Start"
+        modalStart.append(modalImg,modalP,modalBtn);
+    
+        const close = () => {
+            this.hideModal();
+            onClose();
+        }
+        modalBtn.addEventListener('click', close);
+    
+        return modalStart;
+    }
+    //приховати модальне вікно
+    hideModal() {
+        const modal = document.getElementsByClassName('modalStart')[0];
+        modal?.remove();
+    }
+    showWinner(player,playerOneHand,playerTwoHand){
+        const root = this.getModalContainer()
+        root.innerHTML = "";
+        const modal = createElement({
+            tagName: "div",
+            className:"winner-modal"
+        })
+        modal.innerHTML = `
+        <div class="winner__header">
+        <h1></h1>
+        <hr>
+    </div>
+    <div class="winner__results">
+        <ul class="chests-list player">
+            <h3>Your chests:</h3>
+        </ul>
+        <br><br>
+        <ul class="chests-list enemy">
+            <h3>Enemy chests:</h3>
+        </ul >
+        
+    </div>
+    <div class="winner__restart">
+        <button>Play again</button>
+    </div>
+        `
+        const winner = modal.querySelector("h1");
+        if(player=='1'){
+            winner.innerText = 'You won!'
+        }
+        else{
+            winner.innerText = 'You lost!'
+        }
+        const playerChests = modal.querySelector(".player");
+        const enemyChests = modal.querySelector(".enemy");
+        for(let item of playerOneHand.chestsArr){
+            playerChests.innerHTML+=`<li>${item}</li>`
+        }
+        for(let item of playerTwoHand.chestsArr){
+            enemyChests.innerHTML+=`<li>${item}</li>`
+        }
+        const winnerBtn = modal.querySelector(".winner__restart");
+        winnerBtn.onclick = ()=>{
+            document.location.reload();
+        }
+        root.append(modal)
     }
 }
 

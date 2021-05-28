@@ -1,3 +1,4 @@
+//створення елементу HTML з вказаним тегом, класом та атрибутами
 export function createElement({ tagName, className, attributes = {} }) {
     const element = document.createElement(tagName);
   
