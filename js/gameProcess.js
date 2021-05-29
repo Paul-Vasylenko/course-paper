@@ -200,13 +200,21 @@ export class Gameprocess{
                         
                         inImagineNotArr = Array.from(suitsInImagineNot);
                         suitsToAsk = []
-                        for(let suit of SUITS){
+                        let randomSuits = new Set();
+                        let suit = SUITS[0];
+                            while(randomSuits.size != 4){
+                                let iterator = Math.floor((Math.random()*4));
+                                suit = SUITS[iterator]
+                                randomSuits.add(suit)
+                        }
+                        randomSuits= Array.from(randomSuits);
+                        for(let suit of randomSuits){
                             if(suitsInImagineAccurate.includes(suit)){
                                 suitsToAsk.push(suit);
                             }
                         }
                         if(suitsToAsk.length != numberToAsk){
-                            for(let suit of SUITS){
+                            for(let suit of randomSuits){
                                 if(suitsToAsk.length == numberToAsk)break;
                                 else{
                                     if(!suitsInHand.includes(suit) && !inImagineNotArr.includes(suit) && !suitsToAsk.includes(suit)){
