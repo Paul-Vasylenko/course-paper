@@ -16,7 +16,7 @@
 body {
 	user-select: none;
 	overflow-x: hidden;
-	/* overflow-y: hidden; */
+	overflow-y: hidden;
 	width: 100vw;
 	height: 100vh;
 	margin: 0;
@@ -382,7 +382,7 @@ body {
 #not-PC {
 	display: none;
 }
-@media (max-width: 1366px) {
+@media screen and (max-width: 1366px) {
 	#not-PC {
 		display: block;
 		color: red;
