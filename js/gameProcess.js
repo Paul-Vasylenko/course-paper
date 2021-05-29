@@ -162,6 +162,10 @@ export class Gameprocess{
                     numberToAsk = this.imagineHand.filter(item=>item.value==bestCardValue).length;
                     if(numberToAsk==0) numberToAsk++;
                 }
+                let inHand = playerTwoHand.countNumberOfCard(bestCardValue);
+                while(inHand+numberToAsk>4){
+                    numberToAsk--;
+                }
                 myInterface.addAction(`Ememy asked ${numberToAsk} cards`)
                 //якщо вгадали кількість
                 if(playerOneHand.countNumberOfCard(bestCardValue) == numberToAsk){
@@ -183,12 +187,14 @@ export class Gameprocess{
                         let suitsInImagineNot = new Set();
                         let inImagineNotArr=this.imagineHand.map(item=>{
                             if(item.value == bestCardValue && item.isNot.length!=0){
-                                return item.isNot[0];
+                                return item.isNot;
                             }
-                        }); 
+                        });
                         inImagineNotArr.forEach(item=>{
                             if(item){
-                                suitsInImagineNot.add(item);
+                                for(let i=0;i<item.length;i++){
+                                    suitsInImagineNot.add(item[i])
+                                }
                             }
                         })
                         
@@ -217,8 +223,10 @@ export class Gameprocess{
                 }
                 else{
                     myInterface.addAction("Enemy didn't guess.")
-                    let counter = 0;
-                    if(this.imagineHand.map(item=>item.value==bestCardValue).length > 1){
+                    if(this.imagineHand.map(item=>item.value==bestCardValue).length == 1){
+                        this.imagineHand.push(new ImagineHandCard(bestCardValue,false,[]));
+                    }
+                    else if((this.imagineHand.map(item=>item.value==bestCardValue).length == 3) || (this.imagineHand.map(item=>item.value==bestCardValue).length == 2 && this.deck.cards.length>14)){
                         let i = this.imagineHand.findIndex((item,index)=>{
                             if(item.value==bestCardValue && item.isNot.length==0 && item.accurate==false){
                                 return index
@@ -237,12 +245,11 @@ export class Gameprocess{
                             this.imagineHand.splice(i,1);
                             }
                         }
-                    }
-                    else if(this.imagineHand.map(item=>item.value==bestCardValue).length == 1){
+                    }else if(this.imagineHand.map(item=>item.value==bestCardValue).length == 0){
+                        this.imagineHand.push(new ImagineHandCard(bestCardValue,false,[]));
                         this.imagineHand.push(new ImagineHandCard(bestCardValue,false,[]));
                     }
-                    else{
-                        this.imagineHand.push(new ImagineHandCard(bestCardValue,false,[]));
+                    else if(this.imagineHand.map(item=>item.value==bestCardValue).length == 2){
                         this.imagineHand.push(new ImagineHandCard(bestCardValue,false,[]));
                     }
                     const takenCard = this.playerTakeCard(playerTwoHand, 'player2');
@@ -321,6 +328,20 @@ export class Gameprocess{
                     this.checkForChest(takenCard, toHand,'1')
                     }
                 }
+                if(this.playerOneHand.chestsArr.includes(value)){
+                    for(let i=0;i<this.imagineHand.length;i++){
+                        if(this.imagineHand[i].value==value){
+                            this.imagineHand.splice(i,1);
+                            i--;
+                        }
+                    }
+                    for(let i=0;i<this.lastused.length;i++){
+                        if(this.lastused[i]==value){
+                            this.lastused.splice(i,1);
+                            i--;
+                        }
+                    }
+                }
                 myInterface.renderPlayerHand(toHand)
                 myInterface.renderEnemyHand(fromHand)
             
@@ -361,11 +382,17 @@ export class Gameprocess{
                     this.checkForChest(value, toHand,'2')
                 }
                 else{
-                    if(!this.imagineHand.find(item=>{
-                        if(item.value==value && item.accurate == false && item.isNot.includes(suit)) return item;
-                    })){
-                        this.imagineHand.push(new ImagineHandCard(value,false, [suit]));
+                    let itemIm = this.imagineHand.find(item=>{
+                        if(item.value==value && item.accurate==false && item.isNot.length !=0){
+                            return item;
+                        }
+                    })
+                    if(itemIm){
+                        itemIm.isNot.push(suit);
+                    }else{
+                        this.imagineHand.push(new ImagineHandCard(value,false,[suit]))
                     }
+                        
                 }
             }
                 if(counter == 0){
@@ -381,7 +408,20 @@ export class Gameprocess{
                     this.checkForChest(takenCard, toHand,'2')
                     }
                 }
-
+                if(this.playerTwoHand.chestsArr.includes(value)){
+                    for(let i=0;i<this.imagineHand.length;i++){
+                        if(this.imagineHand[i].value==value){
+                            this.imagineHand.splice(i,1);
+                            i--;
+                        }
+                    }
+                    for(let i=0;i<this.lastused.length;i++){
+                        if(this.lastused[i]==value){
+                            this.lastused.splice(i,1);
+                            i--;
+                        }
+                    }
+                }
             myInterface.renderPlayerHand(fromHand)
             myInterface.renderEnemyHand(toHand)
         }
@@ -525,6 +565,18 @@ export class Gameprocess{
             }
             myInterface.addAction(`You've got a chest from ${value}`)
             playerHand.chestsArr.push(value);
+            for(let i=0;i<this.imagineHand.length;i++){
+                if(this.imagineHand[i].value==value){
+                    this.imagineHand.splice(i,1);
+                    i--;
+                }
+            }
+            for(let i=0;i<this.lastused.length;i++){
+                if(this.lastused[i]==value){
+                    this.lastused.splice(i,1);
+                    i--;
+                }
+            }
             if(this.deck.numberOfCards ==0 && playerHand.cards.length==0){
                 myInterface.status = 204;
                 if(player=='1'){
