@@ -1,159 +1,152 @@
-import { createElement } from "./helpers/domHelper.js";
-import {createInnerPlayedHand,
-        createPlayground,
-        createInnerEnemyHand} from './helpers/renderHelper.js'
+import { createElement } from './helpers/domHelper.js';
+import {
+    createInnerPlayedHand,
+    createPlayground,
+    createInnerEnemyHand,
+} from './helpers/renderHelper.js';
 
-
-export class Interface{
-    constructor(){
-        //200-гра ще йде. 204 - хтось переміг
-        this.status = 200;
-    }
+export class Interface {
+    constructor() {}
     static rootElement = document.getElementById('root');
     //створення  колоди, backlog та playground
     createStarter(deck) {
         let checkDeck = document.getElementsByClassName('deck');
-        if(checkDeck[0]){
+        if (checkDeck[0]) {
             checkDeck[0].remove();
         }
-        let playground = createPlayground(deck)
-        Interface.rootElement.append(playground)
+        let playground = createPlayground(deck);
+        Interface.rootElement.append(playground);
         myInterface.renderDeck(deck);
     }
     //оновлення колоди карт
-    renderDeck(deck){
+    renderDeck(deck) {
         const cardsnum = deck.numberOfCards;
-        if(cardsnum>0){
+        if (cardsnum > 0) {
             document.querySelector('.deck p').innerText = cardsnum;
-        }
-        else{
-            let deck =document.querySelector('.deck');
-            if(deck){
+        } else {
+            let deck = document.querySelector('.deck');
+            if (deck) {
                 deck.remove();
             }
-            
         }
     }
     //створення  руки гравця
-    createPlayerHand(playerHand){
+    createPlayerHand(playerHand) {
         const playground = document.getElementsByClassName('playground')[0];
         let playerHandDiv = createElement({
             tagName: 'div',
-            className: 'playerHand'
-        })
-        playerHandDiv= createInnerPlayedHand(playerHand, playerHandDiv);
-        playground.append(playerHandDiv)
+            className: 'playerHand',
+        });
+        playerHandDiv = createInnerPlayedHand(playerHand, playerHandDiv);
+        playground.append(playerHandDiv);
     }
     //оновлення руки гравця
-    renderPlayerHand(playerHand){
-        const playerHandDiv = document.querySelector(".playerHand");
-        playerHandDiv.innerHTML = "";
+    renderPlayerHand(playerHand) {
+        const playerHandDiv = document.querySelector('.playerHand');
+        if (playerHandDiv) {
+            playerHandDiv.innerHTML = '';
+        }
         createInnerPlayedHand(playerHand, playerHandDiv);
     }
     //створення  руки суперника
-    createEnemyHand(playerHand){
+    createEnemyHand(playerHand) {
         let enemyHandDiv = createInnerEnemyHand(playerHand);
         const playground = document.getElementsByClassName('playground')[0];
-        playground.append(enemyHandDiv)
+        playground.append(enemyHandDiv);
     }
     //оновлення руки суперника
-    renderEnemyHand(playerHand){
-        const playerHandDiv = document.querySelector(".enemyHand");
-        playerHandDiv.innerHTML = "";
-        createInnerEnemyHand(playerHand, playerHandDiv)
+    renderEnemyHand(playerHand) {
+        const playerHandDiv = document.querySelector('.enemyHand');
+        if (playerHandDiv) {
+            playerHandDiv.innerHTML = '';
+        }
+        createInnerEnemyHand(playerHand, playerHandDiv);
     }
     //створення початкового модального вікна
-    showStartModal(onClose){
-        const root = this.getModalContainer();
+    showStartModal(onClose) {
+        const root = Interface.rootElement;
         const modal = this.createStartModal(onClose);
-    
+
         root.append(modal);
     }
     //створення скарбничок
-    createChest(player,playerHand){
+    createChest(player) {
         let chestBlock;
         let chestP = createElement({
-            tagName:'p'
-        })
-        if(player=='1'){
-                chestBlock = createElement({
-                tagName: 'div',
-                className: 'playerChest chest'
-            })
-            chestP.innerHTML = `У вас <span>${playerHand.chestsNum}</span> скарбничок`;
-        }
-        else if(player == '2'){
+            tagName: 'p',
+        });
+        if (player == '1') {
             chestBlock = createElement({
                 tagName: 'div',
-                className: 'enemyChest chest'
-            })
-            chestP.innerHTML = `У противника <span>${playerHand.chestsNum}</span> скарбничок`;
+                className: 'playerChest chest',
+            });
+            chestP.innerHTML = `У вас <span>0</span> скарбничок`;
+        } else if (player == '2') {
+            chestBlock = createElement({
+                tagName: 'div',
+                className: 'enemyChest chest',
+            });
+            chestP.innerHTML = `У противника <span>0</span> скарбничок`;
         }
-        
+
         let chestImg = createElement({
             tagName: 'img',
-            attributes:{
-                src:"images/chest.png",
-                alt:"chest"
-            }
-        })
-        chestBlock.append(chestP,chestImg)
-        document.getElementsByClassName('playground')[0].append(chestBlock)
+            attributes: {
+                src: 'images/chest.png',
+                alt: 'chest',
+            },
+        });
+        chestBlock.append(chestP, chestImg);
+        document.getElementsByClassName('playground')[0].append(chestBlock);
     }
     //оновлення скарбничок
-    renderChest(player, playerHand){
-        let chestP
-        if(player=='1'){
-            chestP = document.querySelector('.playerChest p')   
-        chestP.innerHTML = `У вас <span>${playerHand.chestsNum}</span> скарбничок`
-
-        }
-        else if(player == '2'){
-        chestP = document.querySelector('.enemyChest p')
-        chestP.innerHTML = `У противника <span>${playerHand.chestsNum}</span> скарбничок`
+    renderChest(player, playerHand) {
+        let chestP;
+        if (player == '1') {
+            chestP = document.querySelector('.playerChest p');
+            chestP.innerHTML = `У вас <span>${playerHand.chestsNum}</span> скарбничок`;
+        } else if (player == '2') {
+            chestP = document.querySelector('.enemyChest p');
+            chestP.innerHTML = `У противника <span>${playerHand.chestsNum}</span> скарбничок`;
         }
     }
     //додати повідомлення у текстове поле
     addAction(message) {
-        const logs = document.querySelector(".backlog p");
-        if(logs){
-            logs.innerHTML = message + "<br>" + logs.innerHTML
+        const logs = document.querySelector('.backlog p');
+        if (logs) {
+            logs.innerHTML = message + '<br>' + logs.innerHTML;
         }
     }
-    //отримати кореневий блок
-    getModalContainer(){
-        return document.getElementById('root');
-    }
     //стоврити стартове модальне вікно
-    createStartModal(onClose){
+    createStartModal(onClose) {
         let modalStart = createElement({
-            tagName: "div",
-            className:"modalStart"
+            tagName: 'div',
+            className: 'modalStart',
         });
         let modalImg = createElement({
-            tagName: "img",
+            tagName: 'img',
             attributes: {
-                src:"images/message_bg.jpg",
-                alt:"Start"
-            }
+                src: 'images/message_bg.jpg',
+                alt: 'Start',
+            },
         });
         let modalP = createElement({
-            tagName: "p",
-            attributes:{id:"start"}
+            tagName: 'p',
+            attributes: { id: 'start' },
         });
         let modalBtn = createElement({
-            tagName: "button",
+            tagName: 'button',
         });
-        modalP.innerText = "Почніть гру";
-        modalBtn.innerText = "Start"
-        modalStart.append(modalImg,modalP,modalBtn);
-    
+        modalP.innerText = 'Почніть гру';
+        modalBtn.innerText = 'Start';
+        modalStart.append(modalImg, modalP, modalBtn);
+
         const close = () => {
             this.hideModal();
             onClose();
-        }
+        };
         modalBtn.addEventListener('click', close);
-    
+
         return modalStart;
     }
     //приховати модальне вікно
@@ -161,13 +154,13 @@ export class Interface{
         const modal = document.getElementsByClassName('modalStart')[0];
         modal?.remove();
     }
-    showWinner(player,playerOneHand,playerTwoHand){
-        const root = this.getModalContainer()
-        root.innerHTML = "";
+    showWinner(player, playerOneHand, playerTwoHand) {
+        const root = Interface.rootElement;
+        root.innerHTML = '';
         const modal = createElement({
-            tagName: "div",
-            className:"winner-modal"
-        })
+            tagName: 'div',
+            className: 'winner-modal',
+        });
         modal.innerHTML = `
         <div class="winner__header">
         <h1></h1>
@@ -186,27 +179,26 @@ export class Interface{
     <div class="winner__restart">
         <button>Play again</button>
     </div>
-        `
-        const winner = modal.querySelector("h1");
-        if(player=='1'){
-            winner.innerText = 'You won!'
+        `;
+        const winner = modal.querySelector('h1');
+        if (player == '1') {
+            winner.innerText = 'You won!';
+        } else {
+            winner.innerText = 'You lost!';
         }
-        else{
-            winner.innerText = 'You lost!'
+        const playerChests = modal.querySelector('.player');
+        const enemyChests = modal.querySelector('.enemy');
+        for (let item of playerOneHand.chestsArr) {
+            playerChests.innerHTML += `<li>${item}</li>`;
         }
-        const playerChests = modal.querySelector(".player");
-        const enemyChests = modal.querySelector(".enemy");
-        for(let item of playerOneHand.chestsArr){
-            playerChests.innerHTML+=`<li>${item}</li>`
+        for (let item of playerTwoHand.chestsArr) {
+            enemyChests.innerHTML += `<li>${item}</li>`;
         }
-        for(let item of playerTwoHand.chestsArr){
-            enemyChests.innerHTML+=`<li>${item}</li>`
-        }
-        const winnerBtn = modal.querySelector(".winner__restart");
-        winnerBtn.onclick = ()=>{
+        const winnerBtn = modal.querySelector('.winner__restart');
+        winnerBtn.onclick = () => {
             document.location.reload();
-        }
-        root.append(modal)
+        };
+        root.append(modal);
     }
 }
 
