@@ -28,7 +28,9 @@ export class Gameprocess {
         }
 
         const logs = document.querySelector('.backlog p');
-
+        for (let item of this.playerTwoHand.cards) {
+            console.log(item);
+        }
         myInterface.addAction(
             `Choose a card  <select name="cardValue" size="1"  required autofocus></select>`,
         );
@@ -135,7 +137,12 @@ export class Gameprocess {
                                             '2',
                                         );
                                     }
-                                    this.enemyTurn();
+                                    if (
+                                        this.deck.cards.length > 0 ||
+                                        this.playerTwoHand.numberOfCards > 0
+                                    ) {
+                                        this.enemyTurn();
+                                    }
                                 }
                             }
                         };
@@ -173,7 +180,12 @@ export class Gameprocess {
                                 '2',
                             );
                         }
-                        this.enemyTurn();
+                        if (
+                            this.deck.cards.length > 0 ||
+                            this.playerTwoHand.numberOfCards > 0
+                        ) {
+                            this.enemyTurn();
+                        }
                     }
                 };
             } else {
@@ -203,7 +215,12 @@ export class Gameprocess {
                     );
                     this.checkForChest(takenCard, this.playerTwoHand, '2');
                 }
-                this.enemyTurn();
+                if (
+                    this.deck.cards.length > 0 ||
+                    this.playerTwoHand.numberOfCards > 0
+                ) {
+                    this.enemyTurn();
+                }
             }
         };
     }
@@ -419,7 +436,12 @@ export class Gameprocess {
             this.checkForChest(takenCard, this.playerTwoHand, '2');
         }
         //передати хід
-        this.playerTurn();
+        if (
+            this.deck.cards.length > 0 ||
+            this.playerTwoHand.numberOfCards > 0
+        ) {
+            this.playerTurn();
+        }
     }
     //Перевірка наявності карт в руці опонента, та забирання їх в позитивному разі.
     getEnemyCards(toHand, fromHand, suits, value, player) {
@@ -595,8 +617,13 @@ export class Gameprocess {
                     }
                 }
             }
-            myInterface.renderPlayerHand(fromHand);
-            myInterface.renderEnemyHand(toHand);
+            if (
+                this.deck.cards.length > 0 &&
+                this.playerTwoHand.cards.length > 0
+            ) {
+                myInterface.renderPlayerHand(fromHand);
+                myInterface.renderEnemyHand(toHand);
+            }
         }
     }
     //початок гри
