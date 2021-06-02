@@ -35,9 +35,7 @@ export class Gameprocess {
         const cardChoose = logs.querySelector('select[name=cardValue]');
         cardChoose.innerHTML = '<option disabled selected></option>';
         let cardValues = this.playerOneHand.cardValues;
-        for (let i = 0; i < this.playerTwoHand.cards.length; i++) {
-            console.log(this.playerTwoHand.cards[i]);
-        }
+
         for (let i in VALUES) {
             if (cardValues.includes(VALUES[i])) {
                 cardChoose.innerHTML =
@@ -222,7 +220,7 @@ export class Gameprocess {
             );
             this.checkForChest(takenCard, this.playerTwoHand, '2');
         }
-        console.log(this.imagineHand);
+
         myInterface.addAction('<strong>Enemy turn</strong><br>');
         let priority = -1;
         let bestCardValue = null;
