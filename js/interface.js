@@ -80,13 +80,13 @@ export class Interface {
                 tagName: 'div',
                 className: 'playerChest chest',
             });
-            chestP.innerHTML = `У вас <span>0</span> скарбничок`;
+            chestP.innerHTML = `You have <span>0</span> chests`;
         } else if (player == '2') {
             chestBlock = createElement({
                 tagName: 'div',
                 className: 'enemyChest chest',
             });
-            chestP.innerHTML = `У противника <span>0</span> скарбничок`;
+            chestP.innerHTML = `Enemy has <span>0</span> chests`;
         }
 
         let chestImg = createElement({
@@ -104,10 +104,10 @@ export class Interface {
         let chestP;
         if (player == '1') {
             chestP = document.querySelector('.playerChest p');
-            chestP.innerHTML = `У вас <span>${playerHand.chestsNum}</span> скарбничок`;
+            chestP.innerHTML = `You have <span>${playerHand.chestsNum}</span> chests`;
         } else if (player == '2') {
             chestP = document.querySelector('.enemyChest p');
-            chestP.innerHTML = `У противника <span>${playerHand.chestsNum}</span> скарбничок`;
+            chestP.innerHTML = `Enemy has <span>${playerHand.chestsNum}</span> chests`;
         }
     }
     //додати повідомлення у текстове поле
@@ -137,7 +137,7 @@ export class Interface {
         let modalBtn = createElement({
             tagName: 'button',
         });
-        modalP.innerText = 'Почніть гру';
+        modalP.innerText = 'Start game';
         modalBtn.innerText = 'Start';
         modalStart.append(modalImg, modalP, modalBtn);
 

@@ -118,7 +118,7 @@ export function createInnerEnemyHand(enemyHand, enemyHandDiv1) {
         let enemyHandP = createElement({
             tagName: 'p',
         });
-        enemyHandP.innerHTML = `У противника <br>    <span>${enemyHand.numberOfCards}</span> карт`;
+        enemyHandP.innerHTML = `Enemy has <br>    <span>${enemyHand.numberOfCards}</span> cards`;
         enemyHandPre.append(enemyHandP);
         enemyHandDiv.append(enemyHandUl);
         enemyHandDiv.append(enemyHandPre);
@@ -132,7 +132,7 @@ export function createInnerEnemyHand(enemyHand, enemyHandDiv1) {
         let enemyHandP = createElement({
             tagName: 'p',
         });
-        enemyHandP.innerHTML = `У противника <br>    <span>${enemyHand.numberOfCards}</span> карт`;
+        enemyHandP.innerHTML = `Enemy has <br>    <span>${enemyHand.numberOfCards}</span> cards`;
         enemyHandPre.append(enemyHandP);
         enemyHandDiv.append(enemyHandUl);
         enemyHandDiv.append(enemyHandPre);
