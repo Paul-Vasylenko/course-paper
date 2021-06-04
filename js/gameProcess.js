@@ -13,6 +13,8 @@ export class Gameprocess {
     static rootElement = document.getElementById('root');
     //хід гравця
     playerTurn() {
+        myInterface.renderEnemyHand(this.playerTwoHand);
+        myInterface.renderPlayerHand(this.playerOneHand);
         myInterface.addAction(`<strong>Your turn</strong><br>`);
         while (
             this.playerOneHand.cards.length < 4 &&
@@ -223,9 +225,14 @@ export class Gameprocess {
                 }
             }
         };
+        myInterface.renderEnemyHand(this.playerTwoHand);
+        myInterface.renderPlayerHand(this.playerOneHand);
     }
     //Хід комп'ютера
     enemyTurn() {
+        myInterface.renderEnemyHand(this.playerTwoHand);
+        myInterface.renderPlayerHand(this.playerOneHand);
+
         //дібрати карти якщо їх менше 4
         while (
             this.playerTwoHand.cards.length < 4 &&
@@ -287,7 +294,7 @@ export class Gameprocess {
                 let suitsInHand =
                     this.playerTwoHand.getCardSuits(bestCardValue);
                 let suitsToAsk;
-                if (this.deck.cards.length == 0) {
+                if (this.deck.cards.length == 0 || inHand + numberToAsk == 4) {
                     suitsToAsk = [];
                     for (let suit of SUITS) {
                         if (!suitsInHand.includes(suit)) {
@@ -359,7 +366,7 @@ export class Gameprocess {
                 );
             } else {
                 myInterface.addAction("Enemy didn't guess.");
-                const numInImagine = this.imagineHand.map(
+                const numInImagine = this.imagineHand.filter(
                     (item) => item.value == bestCardValue,
                 ).length;
                 if (numInImagine == 1) {
@@ -440,6 +447,8 @@ export class Gameprocess {
             this.deck.cards.length > 0 ||
             this.playerTwoHand.numberOfCards > 0
         ) {
+            myInterface.renderEnemyHand(this.playerTwoHand);
+            myInterface.renderPlayerHand(this.playerOneHand);
             this.playerTurn();
         }
     }
@@ -618,7 +627,7 @@ export class Gameprocess {
                 }
             }
             if (
-                this.deck.cards.length > 0 &&
+                this.deck.cards.length > 0 ||
                 this.playerTwoHand.cards.length > 0
             ) {
                 myInterface.renderPlayerHand(fromHand);

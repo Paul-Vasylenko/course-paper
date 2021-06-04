@@ -97,9 +97,8 @@ export function createInnerPlayedHand(playerHand, playerHandDiv) {
     return playerHandDiv;
 }
 //заповнення руки ворога картами
-export function createInnerEnemyHand(enemyHand, enemyHandDiv1) {
-    let enemyHandDiv = enemyHandDiv1;
-    if (!enemyHandDiv1) {
+export function createInnerEnemyHand(enemyHand, enemyHandDiv) {
+    if (!enemyHandDiv) {
         enemyHandDiv = createElement({
             tagName: 'div',
             className: 'enemyHand',
@@ -154,39 +153,4 @@ function renderNumberOfCardsEnemy(enemyHandUl, i) {
     enemyHandLi.style.left = 600 + 50 * i + 'px';
     enemyHandLi.append(enemyHandImg);
     enemyHandUl.append(enemyHandLi);
-}
-//оновлення руки ворога
-export function renderEnemyHand(enemyHand) {
-    if (enemyHand.numberOfCards >= 7) {
-        for (let i = 1; i < 8; i++) {
-            let enemyHandLi = document.createElement('li');
-            enemyHandLi.classList.add('card' + i.toString());
-            let enemyHandImg = document.createElement('img');
-            enemyHandImg.setAttribute('src', 'images/cardForPlayer1.png');
-            enemyHandLi.appendChild(enemyHandImg);
-            enemyHandUl.appendChild(enemyHandLi);
-        }
-
-        let enemyHandPre = document.createElement('pre');
-        let enemyHandP = document.createElement('p');
-        enemyHandP.innerHTML = 'У противника <br>    <span>7</span> карт';
-        enemyHandPre.appendChild(enemyHandP);
-        enemyHandDiv.appendChild(enemyHandUl);
-        enemyHandDiv.appendChild(enemyHandPre);
-    } else if (enemyHand.numberOfCards < 7) {
-        for (let i = 1; i < enemyHand.numberOfCards + 1; i++) {
-            let enemyHandLi = document.createElement('li');
-            enemyHandLi.classList.add('card' + i.toString());
-            let enemyHandImg = document.createElement('img');
-            enemyHandImg.setAttribute('src', 'images/cardForPlayer1.png');
-            enemyHandLi.appendChild(enemyHandImg);
-            enemyHandUl.appendChild(enemyHandLi);
-        }
-        let enemyHandPre = document.createElement('pre');
-        let enemyHandP = document.createElement('p');
-        enemyHandP.innerHTML = `У противника <br>    <span>${enemyHand.numberOfCards}</span> карт`;
-        enemyHandPre.appendChild(enemyHandP);
-        enemyHandDiv.appendChild(enemyHandUl);
-        enemyHandDiv.appendChild(enemyHandPre);
-    }
 }
