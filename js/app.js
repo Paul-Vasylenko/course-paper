@@ -22,11 +22,7 @@ class App {
                 myInterface.createEnemyHand(playerTwoHand);
                 myInterface.createChest('1', playerOneHand);
                 myInterface.createChest('2', playerTwoHand);
-                const gameProcess = new Gameprocess(
-                    playerOneHand,
-                    playerTwoHand,
-                    deck,
-                );
+                new Gameprocess(playerOneHand, playerTwoHand, deck);
             });
         }
         //console.log(deck);
